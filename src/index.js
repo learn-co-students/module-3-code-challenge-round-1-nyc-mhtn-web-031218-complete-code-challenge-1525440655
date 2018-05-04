@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const commentsURL = `https://randopic.herokuapp.com/comments/`
 
 
-  fetch(imageURL).then(res => res.json()).then(image => showImage(image))
+  fetch(imageURL).then(res => res.json()).then(image => showImage(image));
   // .then(imageJSON => new Image(imageJSON))
   // .then(image => () => { this.showImage() });
 
@@ -24,10 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
     likeButton.addEventListener('click', (e) => {
       let currentLikeCount = image.like_count;
       let newLikeCount = ++currentLikeCount;
-      addLike(image)
+      addLike(image);
       likes.innerText = newLikeCount;
       image.like_count = newLikeCount;
-    })
+    });
 
     let imageComments = image.comments;
     imageComments.forEach(comment => showComment(comment));
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let commentForm = document.getElementById('comment_form');
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      addComment(image)
+      addComment(image);
       commentForm.reset();
     });
   }
@@ -45,12 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let commentEle = document.createElement('li');
     commentEle.setAttribute('id', `comment-id-${comment.id}`);
     commentEle.innerHTML = `${comment.content}<br>`;
+
     let deleteButton = document.createElement('button');
     deleteButton.setAttribute('id', `delete-comment-${comment.id}`);
     deleteButton.innerText = "delete";
+
     commentEle.append(deleteButton);
 
-    deleteButton.addEventListener('click', (e) => {deleteComment(comment)})
+    deleteButton.addEventListener('click', (e) => { deleteComment(comment) });
 
     comments.append(commentEle);
   }
@@ -65,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-    })
+    });
   }
 
   function addComment(image) {
@@ -85,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json()).then(comment => showComment(comment))
+    }).then(res => res.json()).then(comment => showComment(comment));
   }
 
   function deleteComment(comment) {
