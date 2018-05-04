@@ -15,12 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const commentList = document.getElementById('comments')
   const commentInput = document.getElementById('comment_input')
 
-  let currentImage = null
+   currentImage = null
 
   // fetch image and set page up
   getImage(imageURL).then((img) => {
     currentImage = new Image(img)
-    console.log(img)
 
     // get image loaded
     image.setAttribute('src', currentImage.url)
@@ -46,19 +45,18 @@ document.addEventListener('DOMContentLoaded', function() {
   commentForm.addEventListener('submit', (e) => {
     e.preventDefault()
     addComment(commentsURL, imageId, commentInput.value).then((cmt) => {
-      console.log(cmt)
       new Comment(cmt)
       loadComment(commentInput, commentList, cmt)
 
     })
   })
-  
+
   // delete comment
   commentList.addEventListener('click', e => {
     console.log(e.target.id)
     if(e.target.id){
-      removeComment(commentsURL + `${e.target.id}`).then(c => {
-        console.log(c)
+      removeComment(commentsURL + `${e.target.id}`).then(r => {
+        Comment.all.splice(Comment.all.indexOf(Comment.all.find( (c) => c.id === parseInt(e.target.id))),1)
         e.target.parentElement.remove()
       })
     }
@@ -66,17 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 })
 
-
-function loadComment(commentInput, commentList, cmt){
-  let li = document.createElement('li')
-  li.setAttribute('data-id', cmt.id)
-  li.innerHTML = cmt.content+`<input type="button" id="${cmt.id}" value="x">`
-  commentList.append(li)
-  commentInput.value = ""
-}
+// HELPER FUNCTIONS
 
 function getImage(url) {
-  return fetch(url).then(resp => resp.json())
+  return fetch(url).then(r => r.json())
 }
 
 function addLike(url, id) {
@@ -104,6 +95,14 @@ function addComment(url, id, content) {
       'Content-Type': 'application/json'
     }
   }).then(r => r.json())
+}
+
+function loadComment(commentInput, commentList, cmt){
+  let li = document.createElement('li')
+  li.setAttribute('data-id', cmt.id)
+  li.innerHTML = cmt.content+`<input type="button" id="${cmt.id}" value="x">`
+  commentList.append(li)
+  commentInput.value = ""
 }
 
 function removeComment(url){
